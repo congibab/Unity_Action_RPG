@@ -18,6 +18,9 @@ public class MotionEventTool : MonoBehaviour
     [SerializeField]
     private MotionClipSampleingPanel samplingPanel = null;
 
+    [SerializeField]
+    private MotionEventPanel eventPanel = null;
+
     private AnimationClip[] motionClips = null;
 
     private AnimationClip currentClip = null;
@@ -48,6 +51,7 @@ public class MotionEventTool : MonoBehaviour
             if (clipName.Equals("idle"))
             {
                 currentClip = motionClip;
+                eventPanel.Setup(currentClip);
             }
 
             mli.Setup(clipName, () => {
