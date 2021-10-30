@@ -23,10 +23,10 @@ public class MotionEventTest : MonoBehaviour
     }
 }
 
-class Command { }
+//class Command { }
 
-class CommandFactory
-{
+//class CommandFactory
+//{
     
-}
+//}
 
