@@ -25,6 +25,7 @@ public class MotionEventTool : MonoBehaviour
 
     private AnimationClip currentClip = null;
 
+    //public float CurrentFrame;
 
     void Start()
     {
@@ -51,7 +52,7 @@ public class MotionEventTool : MonoBehaviour
             if (clipName.Equals("idle"))
             {
                 currentClip = motionClip;
-                eventPanel.Setup(currentClip);
+                //eventPanel.Setup(currentClip);
             }
 
             mli.Setup(clipName, () => {

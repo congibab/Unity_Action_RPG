@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,10 +25,51 @@ public class MotionEventPanel : MonoBehaviour
 
     private AnimationClip currentClip = null;
 
+    private List<AnimationEvent> clipEventList = null;
 
-    public void Setup(AnimationClip clip)
+    private MotionEventTool motionEventTool = null;
+
+    private void Awake()
+    {
+        createNewMotionEventButton?.onClick.AddListener(OnCreateNewEventButtonClick);
+    }
+
+    private void OnResetMotionEvent()
+    {
+         
+    }
+
+    private void OnSaveMotionEvent()
+    {
+
+#if UNITY_EDITOR
+        UnityEditor.AnimationUtility.SetAnimationEvents(currentClip, clipEventList.ToArray());
+        UnityEditor.EditorUtility.DisplayDialog("保存成功", "モーションイベントの保存成功", "閉じる");
+#endif
+
+    }
+
+    private void OnCreateNewEventButtonClick()
+    {
+        foreach(var checkEvent in clipEventList)
+        {
+        //    if(checkEvent.time == motionEventTool.CurrentFrame)
+        //    {
+        //
+        //    }
+        }
+
+        AnimationEvent newAnimationEvent = new AnimationEvent();
+        //newAnimationEvent.time = motionEventTool;
+        newAnimationEvent.stringParameter = string.Empty;
+
+        clipEventList.Add(newAnimationEvent);
+        SetupmotionEventPanel(clipEventList.ToArray());
+    }
+    public void Setup(AnimationClip clip, MotionEventTool tool)
     {
         currentClip = clip;
+        motionEventTool = tool;
 
         if (currentClip != null)
         {
@@ -39,6 +80,9 @@ public class MotionEventPanel : MonoBehaviour
                 motionListItemScrollview.SetActive(false);
                 return;
             }
+
+            clipEventList.Clear();
+            clipEventList.AddRange(eventDatas);
 
             SetupmotionEventPanel(eventDatas);
         }
@@ -61,7 +105,10 @@ public class MotionEventPanel : MonoBehaviour
             //var newListItem = Instantiate();
             //MotionEventListItem meli = newListItem.get
         }
-
         motionListItemScrollview.SetActive(true);
+    }
+    private void OnMotionEventDeleted(AnimationEvent animationEvent)
+    {
+
     }
 }

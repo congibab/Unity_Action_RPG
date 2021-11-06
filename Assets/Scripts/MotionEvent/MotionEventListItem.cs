@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class MotionEventListItem : MonoBehaviour
     private Text eventData = null;
 
     [SerializeField]
-    private Input eventDataInput = null;
+    private InputField eventDataInput = null;
 
     [SerializeField]
     private Button deleteButton = null;
@@ -24,11 +25,68 @@ public class MotionEventListItem : MonoBehaviour
 
     AnimationEvent animEventData = null;
 
-    public void Setup(AnimationEvent data)
+    private Action<AnimationEvent> onDeleteEvent = null;
+
+    private enum EditState
+    {
+        Edit,
+        Apply
+    }
+
+    private EditState currentEditState = EditState.Edit;
+
+    private void Awake()
+    {
+        editButton?.onClick.AddListener(OnEditButtonClick);
+        deleteButton?.onClick.AddListener(OnDeleteButtonClick);
+    }
+
+    private void OnDeleteButtonClick()
+    {
+        onDeleteEvent?.Invoke(animEventData);
+    }
+
+    private void OnEditButtonClick()
+    {
+        if (currentEditState == EditState.Edit)
+        {
+            currentEditState = EditState.Apply;
+            editButton.GetComponentInChildren<Text>().text = "èÇÖõ";
+            eventDataInput.gameObject.SetActive(true);
+        }
+        else
+        {
+            currentEditState = EditState.Edit;
+            editButton.GetComponentInChildren<Text>().text = "øºó¢";
+            eventDataInput.gameObject.SetActive(false);
+
+            var neweventData = eventDataInput.text;
+            animEventData.stringParameter = neweventData;
+            eventData.text = neweventData;
+        }
+    }
+
+    public void Setup(AnimationEvent data, Action<AnimationEvent> onDeleteCallback)
     {
         if(data != null)
         {
             animEventData = data;
         }
+
+        onDeleteEvent = onDeleteCallback;
+        SetupDosplay();
+    }
+
+    private void SetupDosplay()
+    {
+        if(animEventData == null)
+        {
+            return;
+        }
+
+        currentFrame.text = string.Format("{0:#0.000}", animEventData.time);
+        eventData.text = animEventData.stringParameter;
+        eventDataInput.text = animEventData.stringParameter;
+        //eventDataInput.gameObject.
     }
 }
